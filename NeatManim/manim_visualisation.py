@@ -1,7 +1,3 @@
-
-from cProfile import label
-from tokenize import Number
-from turtle import circle
 from manim import *
 class OpeningManim(Scene):
     def construct(self):
