@@ -1,16 +1,11 @@
-from manim import *
+
 import pickle
 import neat
+import os
 
-class NeatVisualisation(Scene):
-    def construct(self):
-        pass
+def process_network(winner_name:str, config_path:str) -> None:
 
-
-
-def visualize_network(winner_name:str, config_path:str) -> None:
-
-    with open(f"{winner_name}", "rb") as f:
+    with open(f"winners\winners_list\{winner_name}", "rb") as f:
             genome = pickle.load(f)
 
     config = neat.config.Config(neat.DefaultGenome, neat.DefaultReproduction,
@@ -26,7 +21,12 @@ def visualize_network(winner_name:str, config_path:str) -> None:
     network_layers, layers, connections = process_layers(config.genome_config.input_keys, config.genome_config.output_keys, genome.connections.values(), used_nodes)
     #filtering connections
     connections = [(conn.key[0], conn.key[1], conn.weight) for conn in connections if conn.enabled]
-
+    winner = {
+        "network_layers": network_layers,
+        "layers_index": layers,
+        "connections": connections
+    }
+    return winner
 
 def process_layers(inputs:list, outputs:list, connections:list, used_nodes:hash) -> list:
     '''Return a list with each layer and its corresponding nodes'''
@@ -95,5 +95,25 @@ def process_layers(inputs:list, outputs:list, connections:list, used_nodes:hash)
     return network_layers, layers, connections
     
 
-if __name__ == "__main__":
-    visualize_network("winner","config3")
+def animate_winners():
+    ''' animates the winners int the folder winners/winners_list/...
+    whose names are found in the file winners/winners_names.txt'''
+
+    # winners_names:list, config_path:str
+    with open('winners/winners_names.txt','r') as f:
+        lines = f.readlines()
+
+    winners_names = list()
+    for i in lines:
+        i = i.replace('\n','')
+        winners_names.append(i)
+
+    winners = list()
+    local_dir = os.path.dirname(__file__)
+    config_path = os.path.join(local_dir, r'winners\config.txt')
+
+    for winner_name in winners_names:
+        winner = process_network(winner_name, config_path)
+        winners.append(winner)
+
+    return winners
