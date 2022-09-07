@@ -22,14 +22,16 @@ class VisualizeNetwork(Scene):
         return anchors_input[min_index_input],anchors_output[min_index_output]
 
     def construct(self):
+       
         winners = utils.animate_winners()
         winners_inner_neuron_layers = list()
         winners_line_connections = list()
         
         # All the winners should have the same config therefore the same inputs and outputs
+      
+ 
         for winner_index,winner in enumerate(winners):
-            if winner_index != 0:
-                continue
+
             network_layers = winner['network_layers']
             connections = winner["connections"]
 
@@ -50,7 +52,7 @@ class VisualizeNetwork(Scene):
 
             # divides the distance into equal steps
 
-            step = (end_layer_munit - start_layer_munit) / num_layers * RIGHT
+            step = (end_layer_munit - start_layer_munit) / (num_layers - 1) * RIGHT
             neurons_layers = list()
 
             for layer_num,layer in enumerate(network_layers):
@@ -69,9 +71,7 @@ class VisualizeNetwork(Scene):
                 
             winners_inner_neuron_layers.append(VGroup(*neurons_layers[1:-1]))
 
-            if winner_index != 0 :
-                self.play(ReplacementTransform(winners_inner_neuron_layers[winner_index-1],winners_inner_neuron_layers[winner_index]))
-
+            
             
 
             # drawing the connections between neurons
@@ -86,6 +86,7 @@ class VisualizeNetwork(Scene):
                 circle1 = neurons_layers[input_layer][input_pos]
                 circle2 = neurons_layers[output_layer][output_pos]
                 opacity = min(abs(weight),1)
+                opacity = 1
                 line_color = BLUE if weight > 0 else RED
                 start, end = self.get_corresponding_anchors(circle1, circle2)
                 line = Line(start, end)
@@ -97,10 +98,14 @@ class VisualizeNetwork(Scene):
             line_connections = VGroup(*line_connections)
             winners_line_connections.append(line_connections)
 
+            
+            # if winner_index != 0 :
+            #     self.play(ReplacementTransform(winners_inner_neuron_layers[winner_index-1],winners_inner_neuron_layers[winner_index]))
+
             if winner_index != 0 :
-                self.play(ReplacementTransform(winners_line_connections[winner_index-1],winners_line_connections[winner_index]))
+                self.play(ReplacementTransform(VGroup(winners_line_connections[winner_index-1],winners_inner_neuron_layers[winner_index-1]),VGroup(winners_line_connections[winner_index],winners_inner_neuron_layers[winner_index])))
             else:
-                self.play(AnimationGroup(*[Create(line) for line in line_connections],lag_ratio=.005))  
+                self.play(AnimationGroup(*[Create(line) for line in line_connections],run_time= 1))  
             self.wait()
             
 

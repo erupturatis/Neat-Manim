@@ -12,7 +12,10 @@ def process_network(winner_name:str, config_path:str) -> None:
                             neat.DefaultSpeciesSet, neat.DefaultStagnation,
                             config_path)
     # genome[0] is the index of the genome
-    genome = genome[1]
+    try:
+        genome = genome[1]
+    except:
+        pass
     # the nodes numbers are very big eg 2053 despite being only 40 nodes
     used_nodes = {}
     for i,node in enumerate(genome.nodes.keys()):
@@ -63,7 +66,7 @@ def process_layers(inputs:list, outputs:list, connections:list, used_nodes:hash)
                 input, output = conn.key
                 if input < 0:
                     continue
-                if layers[input] == layers[output]:
+                if layers[input] >= layers[output]:
                     layers[output] += 1
                     changes = True
 

@@ -1,3 +1,5 @@
-winner1
-winner1
-winner1
+winner0 
+winner50 
+winner100 
+winner150 
+winner200 
