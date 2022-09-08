@@ -8,6 +8,7 @@ __pycache__/
 
 # Distribution / packaging
 visualize.py
+test.py
 NeatManim/media
 .Python
 build/

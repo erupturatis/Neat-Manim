@@ -76,17 +76,20 @@ class VisualizeNetwork(Scene):
 
             # drawing the connections between neurons
             line_connections = list()
-        
+
+            maximal_weight = 0
             for connection in connections:
                 input, output, weight = connection
-                print(f"{input} {output} {weight}")
+                maximal_weight = max(maximal_weight,abs(weight))
+
+            for connection in connections:
+                input, output, weight = connection
                 input_layer, input_pos = neurons_map[input]
                 output_layer, output_pos = neurons_map[output]
 
                 circle1 = neurons_layers[input_layer][input_pos]
                 circle2 = neurons_layers[output_layer][output_pos]
-                opacity = min(abs(weight),1)
-                opacity = 1
+                opacity = min(abs(weight) / maximal_weight, 1)
                 line_color = BLUE if weight > 0 else RED
                 start, end = self.get_corresponding_anchors(circle1, circle2)
                 line = Line(start, end)

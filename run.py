@@ -1,13 +1,12 @@
 import os
-import pickle
-import neat
 import NeatManim
+
 
 if __name__ == "__main__":
     local_dir = os.path.dirname(__file__)
-    config_path = os.path.join(local_dir, 'config3.txt')
+    config_path = os.path.join(local_dir, r'exampleWinner\config3.txt')
 
-    winner_name = "winner"
+    winner_name = r"exampleWinner\winner"
  
-    NeatManim.visualize_network("winner", config_path = config_path)
+    NeatManim.animate_winners([f"{winner_name}"], config_path = config_path)
     
