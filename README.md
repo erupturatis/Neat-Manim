@@ -26,7 +26,7 @@ Go to the project directory
 Install dependencies
 
 ```bash
-  pip install requirements.txt
+  pip install -r requirements.txt
 ```
 
 Note that you have to have manim already installed on your local machine in order to install it with pip. This project uses [manim community](https://github.com/ManimCommunity/manim). You can see how to install it [here](https://docs.manim.community/en/stable/installation.html).
