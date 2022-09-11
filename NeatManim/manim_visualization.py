@@ -47,13 +47,16 @@ class VisualizeNetwork(Scene):
             num_layers = len(network_layers)
 
             # change this based on the number of layers you have
-            start_layer_munit =  -2
-            end_layer_munit = 2
+            
 
             # divides the distance into equal steps
-
-            step = (end_layer_munit - start_layer_munit) / (num_layers - 1) * RIGHT
+            distance = 1
+            step = distance * RIGHT
+            
+            start_layer_munit =  -step / 2 *(num_layers - 1)
+            end_layer_munit = step / 2 *(num_layers - 1)
             neurons_layers = list()
+            
 
             for layer_num,layer in enumerate(network_layers):
                 num_neurons = len(layer)
@@ -69,7 +72,7 @@ class VisualizeNetwork(Scene):
 
                 neurons_layers.append(neurons)
                 
-            winners_inner_neuron_layers.append(VGroup(*neurons_layers[1:-1]))
+            winners_inner_neuron_layers.append(VGroup(*neurons_layers[:]))
 
             
             
@@ -102,8 +105,8 @@ class VisualizeNetwork(Scene):
             winners_line_connections.append(line_connections)
 
             
-            # if winner_index != 0 :
-            #     self.play(ReplacementTransform(winners_inner_neuron_layers[winner_index-1],winners_inner_neuron_layers[winner_index]))
+            if winner_index != 0 :
+                self.play(ReplacementTransform(winners_inner_neuron_layers[winner_index-1],winners_inner_neuron_layers[winner_index]))
 
             if winner_index != 0 :
                 self.play(ReplacementTransform(VGroup(winners_line_connections[winner_index-1],winners_inner_neuron_layers[winner_index-1]),VGroup(winners_line_connections[winner_index],winners_inner_neuron_layers[winner_index])))
