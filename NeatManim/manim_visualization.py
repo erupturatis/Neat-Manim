@@ -33,6 +33,8 @@ class VisualizeNetwork(Scene):
         for winner_index,winner in enumerate(winners):
 
             network_layers = winner['network_layers']
+            # eliminating redundant layers that appear sometimes
+            network_layers = [layer for layer in network_layers if len(layer) > 0] 
             connections = winner["connections"]
 
             # mapping the neurons to the corresponding layers and index in that layer
@@ -56,6 +58,7 @@ class VisualizeNetwork(Scene):
             start_layer_munit =  -step / 2 *(num_layers - 1)
             end_layer_munit = step / 2 *(num_layers - 1)
             neurons_layers = list()
+            
             
 
             for layer_num,layer in enumerate(network_layers):
@@ -86,6 +89,7 @@ class VisualizeNetwork(Scene):
                 maximal_weight = max(maximal_weight,abs(weight))
 
             for connection in connections:
+                print(connection)
                 input, output, weight = connection
                 input_layer, input_pos = neurons_map[input]
                 output_layer, output_pos = neurons_map[output]

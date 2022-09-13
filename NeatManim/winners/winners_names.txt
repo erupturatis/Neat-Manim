@@ -1,5 +1,5 @@
 winner-generation 0
-winner-generation 5
-winner-generation 10
-winner-generation 15
-winner-generation 20
+winner-generation 30
+winner-generation 50
+winner-generation 70
+winner-generation 90
