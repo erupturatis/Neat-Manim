@@ -42,7 +42,7 @@ To start with working with this project you should run:
 ```
 And then:
 ```bash
-  manim -pql manim-visualization.py VisualizeNetwork
+  manim -pql manim_visualization.py VisualizeNetwork
 ```
 This will run the main scene that will run all the other scrips.
 Your winner files should be placed in 
