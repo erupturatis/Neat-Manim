@@ -1,5 +1,6 @@
-winner-generation 0
-winner-generation 30
-winner-generation 50
-winner-generation 70
-winner-generation 90
+winner-generation 10
+winner-generation 22
+winner-generation 32
+winner-generation 44
+winner-generation 56
+winner-generation 69
