@@ -1,12 +1,7 @@
 from manim import *
 import utils
 
-class VisualizeNetwork(Scene):
-
-    ''' this class can be used for any network as long as the 
-    network layers and the connections are provided by the user'''
-
-    def get_corresponding_anchors(self, circle1:Circle, circle2:Circle):
+def get_corresponding_anchors(circle1:Circle, circle2:Circle):
         '''
         return the anchors corresponding to the minimal distance
         between 2 circles
@@ -21,6 +16,10 @@ class VisualizeNetwork(Scene):
 
         return anchors_input[min_index_input],anchors_output[min_index_output]
 
+class VisualizeNetworks(Scene):
+
+    ''' this class can be used for any network as long as the 
+    network layers and the connections are provided by the user'''
     def construct(self):
        
         winners = utils.animate_winners()
@@ -118,6 +117,150 @@ class VisualizeNetwork(Scene):
             else:
                 self.play(AnimationGroup(*[Create(line) for line in line_connections],run_time= 1))  
             self.wait()
+
+class VisualizeNetworksRefactored(Scene):
+
+    def update_line(self,line:Line, neuron1:Circle, neuron2:Circle):
+        # sets and updater for connections passed
+        def shifter(mob, dt):
+            mob.put_start_and_end_on(get_corresponding_anchors(neuron1,neuron2))
+        line.add_updater(shifter)
+
+    def construct(self):
+        # STEPS
+        # generate initial network
+        # for upcoming networks, compare nodes and match the common ones
+        # Destroy surplus nodes and lines
+        # Rearrange common nodes
+        # Fade out surplus connections, Fade in needed connections
+
+        # DATA STRUCTURES
+
+        winners = utils.animate_winners()
+        previous_winner_inner_neurons = None
+        previous_winner_inner_connections = None
+        previous_neuron_map = {
+            
+        }
+
+        for winner_index,winner in enumerate(winners):
+            print(winner_index)
+            network_layers = winner['network_layers']
+            # eliminating redundant layers that appear sometimes
+            network_layers = [layer for layer in network_layers if len(layer) > 0] 
+            connections = winner["connections"]
+            
+            # mapping the neurons to the corresponding layers and index in that layer
+            neurons_map = {
+
+            }
+            for layer_num,layer in enumerate(network_layers):
+                for pos,neuron in enumerate(layer):
+                    neurons_map[neuron] = [layer_num,pos]
+
+            # drawing the initial network with no connections
+            num_layers = len(network_layers)
+        
+            # All the winners should have the same config therefore the same inputs and outputs
+
+            # divides the distance into equal steps
+            distance = 1
+            step = distance * RIGHT
+            
+            start_layer_munit =  -step / 2 *(num_layers - 1)
+            end_layer_munit = step / 2 *(num_layers - 1)
+            neurons_layers = list()
+            
+            current_winner_inner_neurons = list()
+
+            if winner_index == 0:
+                for layer_num,layer in enumerate(network_layers):
+                    num_neurons = len(layer)
+                    # creating the neurons batch for each layer
+                    
+                    neurons = VGroup(*[Circle(color=WHITE).set_stroke(width=1.5).scale(.07) for _ in range(num_neurons)])
+                    neurons.arrange_in_grid(num_neurons, 1, buff= .07)
+
+                    neurons.shift(start_layer_munit * RIGHT)
+                    neurons.shift(step * layer_num)
+
+                    self.add(neurons)
+                    
+                    for i,neuron in enumerate(layer):
+                        previous_neuron_map[neuron] = neurons[i]
+
+                    neurons_layers.append(neurons)
+            
+            for layer in network_layers:
+                for neuron in layer:
+                    current_winner_inner_neurons.append(neuron)
+            if winner_index != 0:
+                # getting the common neurons between the 2 networks
+                anims = list()
+                common_neurons = list()
+                current_winner_inner_neurons = list()
+               
+
+                
+
+                for layer in network_layers:
+                    for neuron in layer:
+                        if neuron in previous_winner_inner_neurons:
+                            common_neurons.append(neuron)
+                
+                print(previous_winner_inner_neurons)
+                print(current_winner_inner_neurons)
+                print(common_neurons)
+                # moving previous common neurons to their respective positions
+
+                all_previous_circles = list()
+                all_new_circles = list()
+                
+                for layer_num,layer in enumerate(network_layers):
+                    for neuron in layer:
+                        if neuron in common_neurons:
+                            # getting the target position for the neuron
+                            layer = list()
+                            new_layer,new_num = neurons_map[neuron]
+                            
+                            prev_circle = previous_neuron_map[neuron]
+                            prev_circle.generate_target()
+                            all_previous_circles.append(prev_circle)
+                            
+                            new_target = Circle(color=WHITE).set_stroke(width=1.5).scale(.07)
+                            layer.append(new_target)
+                    
+
+                
+ 
+                anims.append(MoveToTarget(prev_circle))
+
+                    
+                all_previous_circles.arrange_in_grid(num_neurons, 1, buff= .07)
+
+                self.play(AnimationGroup(*anims))
+
+                # creating the missing neurons on each layers
+                # Replacing the previous networks with the current one 
+                
+
+            previous_winner_inner_neurons = current_winner_inner_neurons
+            
+            self.wait()
+        
+class Test(Scene):
+
+    def update_line(self,line:Line, neuron1:Circle, neuron2:Circle):
+        def shifter(mob, dt):
+            mob.put_start_and_end_on(get_corresponding_anchors(neuron1,neuron2))
+        line.add_updater(shifter)
+
+    def construct(self):
+        circle1 = Circle(radius=.2)
+        pass
+
+
+
             
 
 
