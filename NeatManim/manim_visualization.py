@@ -1,4 +1,5 @@
 from operator import ne
+import re
 from manim import *
 import utils
 
@@ -171,8 +172,8 @@ class VisualizeNetworksRefactored(Scene):
             for layer_num,layer in enumerate(network_layers):
                 num_neurons = len(layer)
                 # creating the neurons batch for each layer
-                neurons = VGroup(*[Circle(color=WHITE).set_stroke(width=1.5) for _ in range(num_neurons)])
-                neurons.arrange_in_grid(num_neurons, 1, buff= .7).scale(.07)
+                neurons = VGroup(*[Circle(color=WHITE).set_stroke(width=1.5).scale(.07) for _ in range(num_neurons)])
+                neurons.arrange_in_grid(num_neurons, 1, buff= .07)
 
                 neurons.shift(start_layer_munit * RIGHT)
                 neurons.shift(step * layer_num)
@@ -210,14 +211,15 @@ class VisualizeNetworksRefactored(Scene):
 
             anims = list()
             print(winners_inner_neuron_layers)
+            transformed_inner_neuron_layers = list()
             if winner_index != 0:
-                for layer in network_layers:
+                for layer in old_layers:
+                    layer_list = list()
                     for neuron in layer:
                         if neuron in common:
                             # makes animations for all common neurons
                             layer_old, pos_old = neurons_maps[winner_index-1][neuron]
                             layer_new, pos_new = neurons_maps[winner_index][neuron]
-                           
 
                             circle = winners_inner_neuron_layers[winner_index-1][layer_old][pos_old]
                             target = winners_inner_neuron_layers[winner_index][layer_new][pos_new]
@@ -225,9 +227,40 @@ class VisualizeNetworksRefactored(Scene):
                             circle.generate_target()
                             circle.target = target
                             anims.append(MoveToTarget(circle))
-            
+                            layer_list.append(circle)
+                        else:
+                            # makes animations for uncommon neurons (Destroying them)
+                            layer_old, pos_old = neurons_maps[winner_index-1][neuron]
+                            destroyed_circle = winners_inner_neuron_layers[winner_index-1][layer_old][pos_old]
+                            anims.append(Uncreate(destroyed_circle))
+                layer_list = VGroup(*layer_list)
+                transformed_inner_neuron_layers.append(layer_list)
+
+                for layer_num,layer in enumerate(new_layers):
+                    layer_list = list()
+                    for neuron_num,neuron in enumerate(layer):
+                        if not(neuron in common):
+                            # makes animations for uncommon neurons (Destroying them)
+                            circle = Circle(color=WHITE).set_stroke(width=1.5).scale(0.07)
+                            anims.append(Create(circle))
+                            print("HERE _______________________")
+                            print(transformed_inner_neuron_layers)
+                            transformed_inner_neuron_layers[layer_num].append(circle)
+                            
+                            
+                        
+                        layer_list.append(circle)
+                    
+                    layer_list = VGroup(*layer_list)
+                    layer_list.arrange_in_grid(len(layer_list),1, buff= .07)
+                    transformed_inner_neuron_layers.append(layer_list)
+
+                            
                 self.play(AnimationGroup(*anims))
-            
+                transformed_inner_neuron_layers = VGroup(*transformed_inner_neuron_layers)
+                
+                #winners_inner_neuron_layers[winner_index] = transformed_inner_neuron_layers
+          
 
         
 class Test(Scene):
