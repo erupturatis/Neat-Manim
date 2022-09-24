@@ -247,6 +247,7 @@ class VisualizeNetworksRefactored(Scene):
 
 
                 self.play(AnimationGroup(*anims))
+                self.wait(0.1)
 
                 anims = list()
 
@@ -257,9 +258,10 @@ class VisualizeNetworksRefactored(Scene):
                             circle = Circle(color=WHITE).set_stroke(width=1.5).scale(0.07)
                             circle.shift(start_layer_munit * RIGHT)
                             circle.shift(step * layer_num)
-                            
-                            transformed_inner_neuron_layers[layer_num].append(circle)
-                            transformed_inner_neuron_layers_targets[layer_num].append(circle)
+                            new_circ = winners_inner_neuron_layers[winner_index][layer_num][neuron_num]
+
+                            transformed_inner_neuron_layers[layer_num].append(new_circ)
+                            transformed_inner_neuron_layers_targets[layer_num].append(new_circ)
                             neurons_previous_map[layer_num].append(0)
 
                 # transforms and arranges the new transformed neurons
@@ -284,15 +286,11 @@ class VisualizeNetworksRefactored(Scene):
 
                 self.play(AnimationGroup(*anims))
                 winners_inner_neuron_layers[winner_index] = transformed_inner_neuron_layers
+                self.wait()
           
 
         
 class Test(Scene):
-
-    def update_line(self,line:Line, neuron1:Circle, neuron2:Circle):
-        def shifter(mob, dt):
-            mob.put_start_and_end_on(get_corresponding_anchors(neuron1,neuron2))
-        line.add_updater(shifter)
 
     def construct(self):
         circle1 = Circle(radius=.2)

@@ -2,4 +2,3 @@ winner-generation 10
 winner-generation 22
 winner-generation 32
 winner-generation 56
-winner-generation 69
