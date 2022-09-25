@@ -324,9 +324,6 @@ class VisualizeNetworksRefactored(Scene):
                                 else:
                                     # the line should be destroyed
                                     anims.append(Uncreate(line))
-                                    
-
-                    
                         else:
                             # makes animations for uncommon neurons (Destroying them)
                             layer_old, pos_old = neurons_maps[winner_index-1][neuron]
@@ -362,9 +359,19 @@ class VisualizeNetworksRefactored(Scene):
                     transformed_inner_neuron_layers_targets[i] = NewVgroup
                     transformed_inner_neuron_layers[i] = VGroup(*transformed_inner_neuron_layers[i])
 
-                    
-
                 transformed_inner_neuron_layers = VGroup(*transformed_inner_neuron_layers)
+
+                for i,conn in enumerate(new_connections_mobjects):
+                    input, output, weight = new_connections_numerical[i]
+                    
+                    layer_input, pos_input = neurons_maps[winner_index][input]
+                    layer_output, pos_output = neurons_maps[winner_index][output]
+
+                    circle1 = transformed_inner_neuron_layers[layer_input][pos_input]
+                    circle2 = transformed_inner_neuron_layers[layer_output][pos_output]
+
+                    self.update_line(conn, circle1, circle2)
+
              
                 for layer_num,layer in enumerate(transformed_inner_neuron_layers):
                     for neuron_num,neuron in enumerate(layer):
