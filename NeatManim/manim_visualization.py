@@ -335,11 +335,12 @@ class VisualizeNetworksRefactored(Scene):
                 self.wait(0.1)
 
                 anims = list()
+                line_anims = list()
                 for conn in old_connections_mobjects:
-                    anims.append(FadeOut(conn))
+                    line_anims.append(FadeOut(conn))
 
                 for conn in new_connections_mobjects:
-                    anims.append(FadeIn(conn))
+                    line_anims.append(FadeIn(conn))
 
                 # adds the missing circles from the new network 
                 for layer_num,layer in enumerate(new_layers):
@@ -382,6 +383,7 @@ class VisualizeNetworksRefactored(Scene):
                             anims.append(Create(neuron))
 
                 self.play(AnimationGroup(*anims))
+                self.play(AnimationGroup(*line_anims))
                 winners_inner_neuron_layers[winner_index] = transformed_inner_neuron_layers
                 self.wait(2)
           
