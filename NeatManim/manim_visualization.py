@@ -18,7 +18,7 @@ def get_corresponding_anchors(circle1:Circle, circle2:Circle):
 
         return anchors_input[min_index_input],anchors_output[min_index_output]
 
-class VisualizeNetworks(Scene):
+class VisualizeNetwork(Scene):
 
     ''' this class can be used for any network as long as the 
     network layers and the connections are provided by the user'''
