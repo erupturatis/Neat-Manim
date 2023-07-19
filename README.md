@@ -1,5 +1,5 @@
 
-# Neat Manim, a small project that ended up spawning other 2 repos and turned into this monstrosity
+# Neat Manim
 
 A repository made for visualizing the neat algorithm 
 networks evolving over the course of multiple generations. 
