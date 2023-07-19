@@ -1,5 +1,5 @@
 
-# Neat Manim
+# NEAT Manim
 
 A repository made for visualizing the neat algorithm 
 networks evolving over the course of multiple generations. 
@@ -7,7 +7,7 @@ This is an attempt to reproduce videos like
 [this one](https://www.youtube.com/watch?v=j8oU0ksQ3Bc&t=0s) 
 that unfortunately haven't published their repositories
 
-DISCLAIMER !! This repository will only work on winners saved by [this specific implementation](https://github.com/CodeReclaimers/neat-python) of manim.
+DISCLAIMER !! This repository will only work on winners saved by [this specific implementation](https://github.com/CodeReclaimers/neat-python) of NEAT.
 
 
 ## Run Locally
